@@ -1,16 +1,30 @@
 const { DialogSet } = require('botbuilder-dialogs');
 
-const PlacesFlowDialog = require('../dialogs');
+const dialogs = require('../dialogs');
 
-async function handleMessage(context, accessor) {
+const keyWords = {
+  menu: 'menu',
+  aboutme: 'aboutme',
+  aboutauthor: 'aboutauthor',
+  placesflow: 'placesflow',
+  placeinfo: 'placeinfo',
+};
+
+async function handleMessage(ctx, accessor) {
   const dialogSet = new DialogSet(accessor);
 
-  dialogSet.add(new PlacesFlowDialog());
+  Object.values(dialogs).forEach((Dialog) => dialogSet.add(new Dialog()));
 
-  const dialogContext = await dialogSet.createContext(context);
+  const dialogContext = await dialogSet.createContext(ctx);
+  const text = ctx.activity.text.toLowerCase();
+
   await dialogContext.continueDialog();
 
-  if (!context.responded) await dialogContext.beginDialog('placesFlowDialog');
+  if (!ctx.responded) {
+    if (text in keyWords) {
+      await dialogContext.beginDialog(text);
+    } else await ctx.sendActivity('What was that?');
+  }
 }
 
 module.exports = {
