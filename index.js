@@ -1,7 +1,12 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 const restify = require('restify');
 const { BotFrameworkAdapter, MemoryStorage, ConversationState } = require('botbuilder');
+const { WaterfallDialog, DialogSet } = require('botbuilder-dialogs');
+const dialogConfig = require('./dialogConfig');
+const prompts = require('./prompts');
 
-const WelcomeBot = require('./bots/bot');
+const Bot = require('./bot');
 
 const adapter = new BotFrameworkAdapter();
 
@@ -21,8 +26,20 @@ adapter.onTurnError = async (context, error) => {
 
 const memoryStorage = new MemoryStorage();
 const conversationState = new ConversationState(memoryStorage);
+// const userState = new UserState(memoryStorage);
 
-const bot = new WelcomeBot(conversationState);
+const dialogState = conversationState.createProperty('dialogState');
+
+const dialogs = new DialogSet(dialogState);
+
+dialogConfig.forEach((dc) => {
+  const dialog = require(dc.path);
+  dialogs.add(new WaterfallDialog(dc.name, dialog));
+});
+
+prompts.forEach((p) => dialogs.add(p));
+
+const bot = new Bot(conversationState, dialogs);
 
 const server = restify.createServer();
 server.listen(3978, () => {

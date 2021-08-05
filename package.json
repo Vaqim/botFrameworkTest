@@ -11,8 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "botbuilder": "^4.14.1",
     "botbuilder-dialogs": "^4.14.1",
+    "dotenv": "^10.0.0",
+    "joi": "^17.4.2",
     "restify": "^8.5.1"
   },
   "devDependencies": {
