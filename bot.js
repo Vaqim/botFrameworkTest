@@ -1,10 +1,35 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-await-in-loop */
+const { LuisRecognizer } = require('botbuilder-ai');
 const { ActivityHandler } = require('botbuilder');
+
+const { appId, appKey } = require('./config').config;
+
 const dialogConfig = require('./dialogConfig');
 
+const recognizerOptions = {
+  apiVersion: 'v3',
+};
+
+const recognizer = new LuisRecognizer(
+  { applicationId: appId, endpointKey: appKey },
+  recognizerOptions,
+);
+
+async function getIntent(ctx) {
+  const luisResponse = await recognizer.recognize(ctx);
+
+  if (luisResponse.intents[luisResponse.luisResult.prediction.topIntent].score >= 0.8)
+    return luisResponse.luisResult.prediction.topIntent;
+  return null;
+}
+
 async function matchDialog(dc, activity) {
-  const dialog = dialogConfig.find((d) => d.matches.includes(activity.text.toLowerCase()));
+  const intent = await getIntent(dc);
+
+  const dialog = dialogConfig.find(
+    (d) => d.matches.includes(activity.text.toLowerCase()) || d.intents.includes(intent),
+  );
 
   if (dialog) await dc.replaceDialog(dialog.name);
 }
@@ -25,6 +50,7 @@ class Bot extends ActivityHandler {
 
     this.onMessage(async (ctx, next) => {
       const dc = await this.dialogs.createContext(ctx);
+
       await dc.continueDialog();
       await matchDialog(dc, ctx.activity);
 
