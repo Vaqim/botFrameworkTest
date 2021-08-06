@@ -8,6 +8,11 @@ const defaultDialogConfig = {
 const dialogs = [
   { name: 'menu', path: './dialogs/menu', matches: ['menu', 'home'], intents: ['menu'] },
   {
+    name: 'userProfile',
+    path: './dialogs/userProfile',
+    matches: ['profile'],
+  },
+  {
     name: 'aboutMe',
     path: './dialogs/aboutMe',
     matches: ['aboutme'],

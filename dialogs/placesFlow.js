@@ -16,10 +16,6 @@ module.exports = [
     const places = await googleApi.getNearestPlaces(coordinates);
     if (!places.length) return stepCtx.replaceDialog('invalidZipCode');
 
-    // const carousel = generateCarousel(places);
-
-    // await stepCtx.context.sendActivity('cards');
-
     const carousel = generateCarousel(places);
 
     await stepCtx.context.sendActivity({

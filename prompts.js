@@ -1,4 +1,4 @@
-const { NumberPrompt } = require('botbuilder-dialogs');
+const { NumberPrompt, TextPrompt } = require('botbuilder-dialogs');
 
 function zipCodeValidator(ctx) {
   return (
@@ -10,5 +10,6 @@ function zipCodeValidator(ctx) {
 }
 
 const zipCodePrompt = new NumberPrompt('zipCodePrompt', zipCodeValidator);
+const nameInputPrompt = new TextPrompt('nameInputPrompt');
 
-module.exports = [zipCodePrompt];
+module.exports = [zipCodePrompt, nameInputPrompt];

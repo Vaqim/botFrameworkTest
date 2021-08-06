@@ -35,13 +35,15 @@ async function matchDialog(dc, activity) {
 }
 
 class Bot extends ActivityHandler {
-  constructor(conversationState, dialogs) {
+  constructor(conversationState, userState, dialogs) {
     super();
 
     this.dialogs = dialogs;
-
+    this.userState = userState;
     this.conversationState = conversationState;
+
     this.dialogState = this.conversationState.createProperty('DialogState');
+    this.userProfile = this.userState.createProperty('userProfile');
 
     this.onDialog(async (ctx, next) => {
       await this.conversationState.saveChanges(ctx, false);
@@ -61,6 +63,8 @@ class Bot extends ActivityHandler {
 
     this.onDialog(async (ctx, next) => {
       await this.conversationState.saveChanges(ctx, false);
+      await this.userState.saveChanges(ctx, false);
+
       await next();
     });
 
@@ -81,6 +85,7 @@ class Bot extends ActivityHandler {
     await super.run(ctx);
 
     await this.conversationState.saveChanges(ctx);
+    await this.userState.saveChanges(ctx);
   }
 }
 
