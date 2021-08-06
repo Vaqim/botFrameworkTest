@@ -6,6 +6,7 @@ const { ActivityHandler } = require('botbuilder');
 const { appId, appKey } = require('./config').config;
 
 const dialogConfig = require('./dialogConfig');
+const { stepStorage } = require('./storages');
 
 const recognizerOptions = {
   apiVersion: 'v3',
@@ -24,6 +25,25 @@ async function getIntent(ctx) {
   return null;
 }
 
+async function addStep(dc, dialogName) {
+  const stepData = await stepStorage.get(dc.context, []);
+
+  if (dialogName === 'menu') return stepStorage.set(dc.context, []);
+  if (dialogName === 'backStep') return false;
+  if (
+    stepData.length &&
+    dialogName === stepData[stepData.length - 1].name &&
+    dc.context.activity.value === stepData[stepData.length - 1].parameter
+  )
+    return false;
+
+  const parameter = dc.context.activity.value;
+
+  stepData.push({ name: dialogName, parameter });
+
+  return stepStorage.set(dc.context, stepData);
+}
+
 async function matchDialog(dc, activity) {
   const intent = await getIntent(dc);
 
@@ -31,7 +51,10 @@ async function matchDialog(dc, activity) {
     (d) => d.matches.includes(activity.text.toLowerCase()) || d.intents.includes(intent),
   );
 
-  if (dialog) await dc.replaceDialog(dialog.name);
+  if (dialog) {
+    await dc.replaceDialog(dialog.name);
+    await addStep(dc, dialog.name);
+  }
 }
 
 class Bot extends ActivityHandler {
@@ -43,7 +66,6 @@ class Bot extends ActivityHandler {
     this.conversationState = conversationState;
 
     this.dialogState = this.conversationState.createProperty('DialogState');
-    this.userProfile = this.userState.createProperty('userProfile');
 
     this.onDialog(async (ctx, next) => {
       await this.conversationState.saveChanges(ctx, false);

@@ -4,7 +4,7 @@ const restify = require('restify');
 const { BotFrameworkAdapter } = require('botbuilder');
 const { WaterfallDialog, DialogSet } = require('botbuilder-dialogs');
 
-const { conversationState, userState } = require('./storages');
+const { conversationState, userState, dialogState } = require('./storages');
 const dialogConfig = require('./dialogConfig');
 const prompts = require('./prompts');
 
@@ -25,8 +25,6 @@ adapter.onTurnError = async (context, error) => {
   await context.sendActivity('The bot encountered an error or bug.');
   await context.sendActivity('To continue to run this bot, please fix the bot source code.');
 };
-
-const dialogState = conversationState.createProperty('dialogState');
 
 const dialogs = new DialogSet(dialogState);
 

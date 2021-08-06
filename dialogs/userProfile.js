@@ -16,6 +16,4 @@ const steps = [
   },
 ];
 
-console.log(steps);
-
 module.exports = steps;
