@@ -48,6 +48,10 @@ server.listen(3978, () => {
   console.log('\nTo talk to your bot, open the emulator select "Open Bot"');
 });
 
+server.get('/', (req, res) => {
+  res.json({ message: 'Hello from server' });
+});
+
 server.post('/api/messages', (req, res) => {
   adapter.processActivity(req, res, async (context) => {
     await bot.run(context);
