@@ -4,13 +4,17 @@ const restify = require('restify');
 const { BotFrameworkAdapter } = require('botbuilder');
 const { WaterfallDialog, DialogSet } = require('botbuilder-dialogs');
 
+const { appId, appPassword } = require('./config').config;
 const { conversationState, userState, dialogState } = require('./storages');
 const dialogConfig = require('./dialogConfig');
 const prompts = require('./prompts');
 
 const Bot = require('./bot');
 
-const adapter = new BotFrameworkAdapter();
+const adapter = new BotFrameworkAdapter({
+  appId,
+  appPassword,
+});
 
 adapter.onTurnError = async (context, error) => {
   console.error(`\n [onTurnError] unhandled error: ${error}`);

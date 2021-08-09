@@ -3,7 +3,7 @@
 const { LuisRecognizer } = require('botbuilder-ai');
 const { ActivityHandler } = require('botbuilder');
 
-const { appId, appKey } = require('./config').config;
+const { luisAppId, luisAppKey } = require('./config').config;
 
 const dialogConfig = require('./dialogConfig');
 const { stepStorage } = require('./storages');
@@ -13,7 +13,7 @@ const recognizerOptions = {
 };
 
 const recognizer = new LuisRecognizer(
-  { applicationId: appId, endpointKey: appKey },
+  { applicationId: luisAppId, endpointKey: luisAppKey },
   recognizerOptions,
 );
 
