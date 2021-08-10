@@ -9,7 +9,7 @@ async function facebookMessengerSetup() {
       `${FACEBOOK_MESSENGER_PROFILE_ORIGIN}access_token=${facebookPageAccessToken}`,
       {
         get_started: {
-          payload: 'menu',
+          payload: 'welcome',
         },
         persistent_menu: [
           {
