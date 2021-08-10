@@ -19,17 +19,17 @@ async function facebookMessengerSetup() {
               {
                 type: 'postback',
                 title: 'Main Menu',
-                payload: 'Main Menu',
+                payload: 'menu',
               },
               {
                 type: 'postback',
                 title: 'About Me',
-                payload: 'About Me',
+                payload: 'aboutme',
               },
               {
                 type: 'postback',
                 title: 'About Author',
-                payload: 'About Author',
+                payload: 'aboutauthor',
               },
             ],
           },

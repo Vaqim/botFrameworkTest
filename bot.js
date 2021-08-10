@@ -20,9 +20,18 @@ const recognizer = new LuisRecognizer(
 async function getIntent(ctx) {
   const luisResponse = await recognizer.recognize(ctx);
 
+  const intentData = { intent: null, parameter: null };
+
   if (luisResponse.intents[luisResponse.luisResult.prediction.topIntent].score >= 0.8)
-    return luisResponse.luisResult.prediction.topIntent;
-  return null;
+    intentData.intent = luisResponse.luisResult.prediction.topIntent;
+
+  if (Object.keys(luisResponse.luisResult.prediction.entities).length)
+    [intentData.parameter] =
+      luisResponse.luisResult.prediction.entities[
+        Object.keys(luisResponse.luisResult.prediction.entities)[0]
+      ];
+
+  return intentData;
 }
 
 async function addStep(dc, dialogName) {
@@ -45,13 +54,14 @@ async function addStep(dc, dialogName) {
 }
 
 async function matchDialog(dc, activity) {
-  const intent = await getIntent(dc);
+  const { intent, parameter } = await getIntent(dc);
 
   const dialog = dialogConfig.find(
     (d) => d.matches.includes(activity.text.toLowerCase()) || d.intents.includes(intent),
   );
 
   if (dialog) {
+    if (parameter) dc.context.activity.value = parameter;
     await dc.replaceDialog(dialog.name);
     await addStep(dc, dialog.name);
   }

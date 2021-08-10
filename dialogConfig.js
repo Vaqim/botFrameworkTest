@@ -35,7 +35,7 @@ const dialogs = [
     matches: ['findcafe', 'findrestaurant'],
     intents: ['findRestaurant'],
   },
-  { name: 'placeInfo', path: './dialogs/placeInfo', matches: ['placeinfo'] },
+  { name: 'placeInfo', path: './dialogs/placeInfo', intents: ['placeInfo'] },
   { name: 'welcome', path: './dialogs/welcome', matches: ['welcome'] },
 ].map((el) => ({
   ...defaultDialogConfig,

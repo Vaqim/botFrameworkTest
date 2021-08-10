@@ -34,7 +34,7 @@ function generateCarousel(data) {
       [getStaticMapLink(place.geometry.location)],
       [
         templates.getUrlButton('View On Map', getMapLink(place.vicinity, place.place_id)),
-        templates.getMessageBackButton('Place Info', 'placeinfo', place.place_id),
+        templates.getPostBackButton('Place Info', `placeinfo_${place.place_id}`),
         templates.getPostBackButton('Menu', 'menu'),
       ],
     );
