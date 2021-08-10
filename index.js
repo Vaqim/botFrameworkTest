@@ -8,6 +8,7 @@ const { appId, appPassword } = require('./config').config;
 const { conversationState, userState, dialogState } = require('./storages');
 const dialogConfig = require('./dialogConfig');
 const prompts = require('./prompts');
+const facebookMessengerSetup = require('./services/facebookSetup');
 
 const Bot = require('./bot');
 
@@ -40,6 +41,7 @@ dialogConfig.forEach((dc) => {
 prompts.forEach((p) => dialogs.add(p));
 
 const bot = new Bot(conversationState, userState, dialogs);
+facebookMessengerSetup();
 
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
