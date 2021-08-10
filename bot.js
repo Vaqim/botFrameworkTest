@@ -1,29 +1,29 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-await-in-loop */
-const { LuisRecognizer } = require('botbuilder-ai');
+// const { LuisRecognizer } = require('botbuilder-ai');
 const { ActivityHandler } = require('botbuilder');
 
-const { luisAppId, luisAppKey } = require('./config').config;
+// const { luisAppId, luisAppKey } = require('./config').config;
 
 const dialogConfig = require('./dialogConfig');
 const { stepStorage } = require('./storages');
 
-const recognizerOptions = {
-  apiVersion: 'v3',
-};
+// const recognizerOptions = {
+//   apiVersion: 'v3',
+// };
 
-const recognizer = new LuisRecognizer(
-  { applicationId: luisAppId, endpointKey: luisAppKey },
-  recognizerOptions,
-);
+// const recognizer = new LuisRecognizer(
+//   { applicationId: luisAppId, endpointKey: luisAppKey },
+//   recognizerOptions,
+// );
 
-async function getIntent(ctx) {
-  const luisResponse = await recognizer.recognize(ctx);
+// async function getIntent(ctx) {
+//   const luisResponse = await recognizer.recognize(ctx);
 
-  if (luisResponse.intents[luisResponse.luisResult.prediction.topIntent].score >= 0.8)
-    return luisResponse.luisResult.prediction.topIntent;
-  return null;
-}
+//   if (luisResponse.intents[luisResponse.luisResult.prediction.topIntent].score >= 0.8)
+//     return luisResponse.luisResult.prediction.topIntent;
+//   return null;
+// }
 
 async function addStep(dc, dialogName) {
   const stepData = await stepStorage.get(dc.context, []);
@@ -45,11 +45,9 @@ async function addStep(dc, dialogName) {
 }
 
 async function matchDialog(dc, activity) {
-  const intent = await getIntent(dc);
+  // const intent = await getIntent(dc);
 
-  const dialog = dialogConfig.find(
-    (d) => d.matches.includes(activity.text.toLowerCase()) || d.intents.includes(intent),
-  );
+  const dialog = dialogConfig.find((d) => d.matches.includes(activity.text.toLowerCase()));
 
   if (dialog) {
     await dc.replaceDialog(dialog.name);
