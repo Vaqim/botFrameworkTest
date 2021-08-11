@@ -43,7 +43,7 @@ function generateCarousel(data) {
   return cards;
 }
 
-function generatePlaceInfoCard(place, platform) {
+function generatePlaceInfoCard(place) {
   const { name, formatted_address } = place;
   const phone = place.international_phone_number;
   const openingHours = place.opening_hours;
@@ -53,7 +53,7 @@ function generatePlaceInfoCard(place, platform) {
 
   if (openingHours) {
     timetableString = timetableString.concat(
-      `\n\n Now ${openingHours.open_now ? 'OPENED' : 'CLOSED'}`,
+      `\n\nNow ${openingHours.open_now ? 'OPENED' : 'CLOSED'}`,
     );
     if (openingHours.weekday_text)
       openingHours.weekday_text.forEach((e) => {
@@ -63,18 +63,14 @@ function generatePlaceInfoCard(place, platform) {
 
   const textMessage = `${name}${formatted_address}${phoneString}${timetableString}`;
 
-  if (platform === 'facebook')
-    return {
-      channelData: templates.fbButtonsTemplate(textMessage, [
-        {
-          title: 'Menu',
-          payload: 'menu',
-          type: 'postback',
-        },
-      ]),
-    };
-
   return {
+    channelData: templates.fbButtonsTemplate(textMessage, [
+      {
+        title: 'Menu',
+        payload: 'menu',
+        type: 'postback',
+      },
+    ]),
     attachments: [
       CardFactory.heroCard(name, textMessage, null, [templates.getPostBackButton('Menu', 'menu')]),
     ],
