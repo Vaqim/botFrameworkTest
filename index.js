@@ -12,7 +12,10 @@ const facebookMessengerSetup = require('./services/facebookSetup');
 
 const Bot = require('./bot');
 
-const adapter = new BotFrameworkAdapter();
+const adapter = new BotFrameworkAdapter({
+  appId,
+  appPassword,
+});
 
 adapter.onTurnError = async (context, error) => {
   console.error(`\n [onTurnError] unhandled error: ${error}`);
@@ -38,7 +41,7 @@ dialogConfig.forEach((dc) => {
 prompts.forEach((p) => dialogs.add(p));
 
 const bot = new Bot(conversationState, userState, dialogs);
-// facebookMessengerSetup();
+facebookMessengerSetup();
 
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
