@@ -15,7 +15,7 @@ module.exports = [
 
     const placeDetails = await getPlaceDetails(placeId);
 
-    const card = generatePlaceInfoCard(placeDetails, stepCtx.activity.channelId);
+    const card = generatePlaceInfoCard(placeDetails, stepCtx.context.activity.channelId);
 
     await stepCtx.context.sendActivity(card);
     return stepCtx.endDialog();
