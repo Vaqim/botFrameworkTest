@@ -26,4 +26,19 @@ function getUrlButton(title, value) {
   };
 }
 
-module.exports = { getPostBackButton, getMessageBackButton, getUrlButton };
+function fbButtonsTemplate(text, buttons) {
+  return {
+    message: {
+      attachment: {
+        type: 'template',
+        payload: {
+          text,
+          buttons,
+          template_type: 'button',
+        },
+      },
+    },
+  };
+}
+
+module.exports = { getPostBackButton, getMessageBackButton, getUrlButton, fbButtonsTemplate };
