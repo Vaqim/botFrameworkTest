@@ -43,7 +43,7 @@ function generateCarousel(data) {
   return cards;
 }
 
-function generatePlaceInfoCard(place) {
+function generatePlaceInfoCard(place, platform) {
   const { name, formatted_address } = place;
   const phone = place.international_phone_number;
   const openingHours = place.opening_hours;
@@ -63,17 +63,22 @@ function generatePlaceInfoCard(place) {
 
   const textMessage = `${name}${formatted_address}${phoneString}${timetableString}`;
 
-  return templates.fbButtonsTemplate(textMessage, [
-    {
-      title: 'Menu',
-      payload: 'menu',
-      type: 'postback',
-    },
-  ]);
+  if (platform === 'facebook')
+    return {
+      channelData: templates.fbButtonsTemplate(textMessage, [
+        {
+          title: 'Menu',
+          payload: 'menu',
+          type: 'postback',
+        },
+      ]),
+    };
 
-  // return CardFactory.heroCard(name, textMessage, null, [
-  //   templates.getPostBackButton('Menu', 'menu'),
-  // ]);
+  return {
+    attachments: [
+      CardFactory.heroCard(name, textMessage, null, [templates.getPostBackButton('Menu', 'menu')]),
+    ],
+  };
 }
 
 module.exports = {

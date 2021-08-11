@@ -28,14 +28,12 @@ function getUrlButton(title, value) {
 
 function fbButtonsTemplate(text, buttons) {
   return {
-    message: {
-      attachment: {
-        type: 'template',
-        payload: {
-          text,
-          buttons,
-          template_type: 'button',
-        },
+    attachment: {
+      type: 'template',
+      payload: {
+        text,
+        buttons,
+        template_type: 'button',
       },
     },
   };
