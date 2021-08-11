@@ -6,7 +6,7 @@ const defaultDialogConfig = {
 };
 
 const dialogs = [
-  { name: 'menu', path: './dialogs/menu', matches: ['menu', 'home'], intents: ['menu'] },
+  { name: 'menu', path: './dialogs/menu', matches: ['menu'], intents: ['menu'] },
   { name: 'backStep', path: './dialogs/backStep', matches: ['back'] },
   {
     name: 'userProfile',
@@ -32,7 +32,7 @@ const dialogs = [
   {
     name: 'placesFlow',
     path: './dialogs/placesFlow',
-    matches: ['findcafe', 'findrestaurant'],
+    matches: ['findcafe'],
     intents: ['findRestaurant'],
   },
   { name: 'placeInfo', path: './dialogs/placeInfo', intents: ['placeInfo'] },

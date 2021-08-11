@@ -8,12 +8,13 @@ function getPostBackButton(title, value) {
   };
 }
 
-function getMessageBackButton(title, text, value) {
+function getMessageBackButton(title, text, value = null) {
   return {
     type: ActionTypes.MessageBack,
     text,
     value,
     title,
+    displayText: title,
   };
 }
 

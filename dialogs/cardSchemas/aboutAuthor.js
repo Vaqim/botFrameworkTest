@@ -1,12 +1,12 @@
-const { CardFactory, ActionTypes } = require('botbuilder');
+const { CardFactory } = require('botbuilder');
 
-const button = { type: ActionTypes.PostBack, value: 'menu', title: 'Back' };
+const { getMessageBackButton } = require('../../templates');
 
 const card = CardFactory.heroCard(
   'About Author',
   'My author is Vadym Saiko - Node.js Intern in MOC',
   null,
-  [button],
+  [getMessageBackButton('Back', 'menu')],
 );
 
 module.exports = card;
