@@ -63,11 +63,13 @@ function generatePlaceInfoCard(place) {
 
   const textMessage = `${name}${formatted_address}${phoneString}${timetableString}`;
 
-  return templates.fbButtonsTemplate(textMessage, {
-    title: 'Menu',
-    payload: 'menu',
-    type: 'postback',
-  });
+  return templates.fbButtonsTemplate(textMessage, [
+    {
+      title: 'Menu',
+      payload: 'menu',
+      type: 'postback',
+    },
+  ]);
 
   // return CardFactory.heroCard(name, textMessage, null, [
   //   templates.getPostBackButton('Menu', 'menu'),
