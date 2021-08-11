@@ -39,8 +39,15 @@ const steps = [
   },
 
   async (stepCtx) => {
+    console.log(stepCtx.context.activity.channelData.message);
     if (stepCtx.context.activity.channelData.message.quick_reply)
       await stepCtx.context.sendActivity(`You choose ${stepCtx.context.activity.text} color`);
+  },
+  async (stepCtx) => stepCtx.prompt('nameInputPrompt', 'enter your name'),
+  async (stepCtx) => {
+    const name = stepCtx.result;
+
+    await stepCtx.context.sendActivity(`Hello ${name}`);
     return stepCtx.endDialog();
   },
 ];
