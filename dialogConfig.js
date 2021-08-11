@@ -30,12 +30,12 @@ const dialogs = [
     matches: ['invalidzipcode'],
   },
   {
-    name: 'placesFlow',
+    name: 'findCafe',
     path: './dialogs/placesFlow',
     matches: ['findcafe'],
     intents: ['findRestaurant'],
   },
-  { name: 'placeInfo', path: './dialogs/placeInfo', intents: ['placeInfo'] },
+  { name: 'placeInfo', path: './dialogs/placeInfo' },
   { name: 'welcome', path: './dialogs/welcome', matches: ['welcome'] },
 ].map((el) => ({
   ...defaultDialogConfig,

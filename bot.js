@@ -6,7 +6,8 @@ const { ActivityHandler } = require('botbuilder');
 const { luisAppId, luisAppKey } = require('./config').config;
 
 const dialogConfig = require('./dialogConfig');
-const { stepStorage } = require('./storages');
+const { addStep } = require('./services/backStep');
+const postBackHandler = require('./services/postBackHandler');
 
 const recognizerOptions = {
   apiVersion: 'v3',
@@ -20,51 +21,27 @@ const recognizer = new LuisRecognizer(
 async function getIntent(ctx) {
   const luisResponse = await recognizer.recognize(ctx);
 
-  const intentData = { intent: null, parameter: null };
-
   if (luisResponse.intents[luisResponse.luisResult.prediction.topIntent].score >= 0.8)
-    intentData.intent = luisResponse.luisResult.prediction.topIntent;
-
-  if (Object.keys(luisResponse.luisResult.prediction.entities).length)
-    [intentData.parameter] =
-      luisResponse.luisResult.prediction.entities[
-        Object.keys(luisResponse.luisResult.prediction.entities)[0]
-      ];
-
-  return intentData;
+    return luisResponse.luisResult.prediction.topIntent;
+  return null;
 }
 
-async function addStep(dc, dialogName) {
-  const stepData = await stepStorage.get(dc.context, []);
+async function matchDialog(dc) {
+  const { activity } = dc.context;
 
-  if (dialogName === 'menu') return stepStorage.set(dc.context, []);
-  if (dialogName === 'backStep') return false;
-  if (
-    stepData.length &&
-    dialogName === stepData[stepData.length - 1].name &&
-    dc.context.activity.value === stepData[stepData.length - 1].parameter
-  )
-    return false;
+  if (activity.channelData.postBack) return postBackHandler(dc);
 
-  const parameter = dc.context.activity.value;
-
-  stepData.push({ name: dialogName, parameter });
-
-  return stepStorage.set(dc.context, stepData);
-}
-
-async function matchDialog(dc, activity) {
-  const { intent, parameter } = await getIntent(dc);
+  const intent = await getIntent(dc);
 
   const dialog = dialogConfig.find(
     (d) => d.matches.includes(activity.text.toLowerCase()) || d.intents.includes(intent),
   );
 
   if (dialog) {
-    if (parameter) dc.context.activity.value = parameter;
     await dc.replaceDialog(dialog.name);
-    await addStep(dc, dialog.name);
+    return addStep(dc, dialog.name);
   }
+  return false;
 }
 
 class Bot extends ActivityHandler {
@@ -86,7 +63,7 @@ class Bot extends ActivityHandler {
       const dc = await this.dialogs.createContext(ctx);
 
       await dc.continueDialog();
-      await matchDialog(dc, ctx.activity);
+      await matchDialog(dc);
 
       if (!ctx.responded) await dc.beginDialog('menu');
 
