@@ -24,12 +24,12 @@ async function facebookMessengerSetup() {
               {
                 type: 'postback',
                 title: 'About Me',
-                payload: 'aboutme',
+                payload: 'aboutMe',
               },
               {
                 type: 'postback',
                 title: 'About Author',
-                payload: 'aboutauthor',
+                payload: 'aboutAuthor',
               },
             ],
           },
