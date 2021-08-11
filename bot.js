@@ -29,7 +29,7 @@ async function getIntent(ctx) {
 async function matchDialog(dc) {
   const { activity } = dc.context;
 
-  if (activity.channelData.postBack) return postBackHandler(dc);
+  if (activity.channelData.postBack || activity.channelData.postback) return postBackHandler(dc);
 
   const intent = await getIntent(dc);
 
