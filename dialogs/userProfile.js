@@ -9,39 +9,37 @@ const steps = [
 
     await userProfile.set(stepCtx.context, { name });
 
-    // const profile = await userProfile.get(stepCtx.context);
+    const profile = await userProfile.get(stepCtx.context);
 
     const cardActions = [
       {
-        type: ActionTypes.PostBack,
+        type: ActionTypes.MessageBack,
         title: 'Red',
-        value: 'Red',
-        // image: 'https://via.placeholder.com/20/FF0000?text=R',
-        // imageAltText: 'R',
+        text: 'Red',
       },
       {
-        type: ActionTypes.PostBack,
+        type: ActionTypes.MessageBack,
         title: 'Yellow',
-        value: 'Yellow',
-        // image: 'https://via.placeholder.com/20/FFFF00?text=Y',
-        // imageAltText: 'Y',
+        text: 'Yellow',
       },
       {
-        type: ActionTypes.PostBack,
+        type: ActionTypes.MessageBack,
         title: 'Blue',
-        value: 'Blue',
-        // image: 'https://via.placeholder.com/20/0000FF?text=B',
-        // imageAltText: 'B',
+        text: 'Blue',
       },
     ];
 
     const reply = MessageFactory.suggestedActions(cardActions, 'What is the best color?');
 
-    await stepCtx.context.sendActivity(reply);
+    await stepCtx.context.sendActivity(
+      `Hello ${profile.name}! I'm Restaurant finder :)\nI will assist to find the restaurant for you!`,
+    );
 
-    // await stepCtx.context.sendActivity(
-    //   `Hello ${profile.name}! I'm Restaurant finder :)\nI will assist to find the restaurant for you!`,
-    // );
+    await stepCtx.context.sendActivity(reply);
+  },
+
+  async (stepCtx) => {
+    await stepCtx.context.sendActivity(`You choose ${stepCtx.context.activity.text} color`);
     return stepCtx.endDialog();
   },
 ];
