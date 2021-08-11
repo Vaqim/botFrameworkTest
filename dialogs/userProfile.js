@@ -39,7 +39,8 @@ const steps = [
   },
 
   async (stepCtx) => {
-    await stepCtx.context.sendActivity(`You choose ${stepCtx.context.activity.text} color`);
+    if (stepCtx.context.activity.message.quick_reply)
+      await stepCtx.context.sendActivity(`You choose ${stepCtx.context.activity.text} color`);
     return stepCtx.endDialog();
   },
 ];

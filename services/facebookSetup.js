@@ -8,6 +8,7 @@ async function facebookMessengerSetup() {
     const res = await axios.post(
       `${FACEBOOK_MESSENGER_PROFILE_ORIGIN}access_token=${facebookPageAccessToken}`,
       {
+        ice_breakers: [],
         get_started: {
           payload: 'welcome',
         },
